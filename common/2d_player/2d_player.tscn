@@ -1,0 +1,216 @@
+[gd_scene load_steps=15 format=3 uid="uid://2bmcgtfmy84e"]
+
+[ext_resource type="Script" path="res://common/2d_player/2d_player.gd" id="1_go0fs"]
+[ext_resource type="Texture2D" uid="uid://dt8jvx27os6o7" path="res://assets/kenney_tiny/tiny_dungeon.png" id="2_dduua"]
+[ext_resource type="Script" path="res://components/01_health_component/health_component.gd" id="2_e0s1e"]
+[ext_resource type="PackedScene" uid="uid://docbe2effcwcp" path="res://common/smoothed_bar/smoothed_progress_bar.tscn" id="3_htsb4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n0pt0"]
+size = Vector2(14, 15)
+
+[sub_resource type="Animation" id="Animation_qdunx"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRoot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_mnxla"]
+resource_name = "death"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRoot/Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_death_animation_finished"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_pwdpm"]
+resource_name = "idle"
+length = 0.001
+loop_mode = 2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRoot/Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(-2),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteRoot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_kxfb6"]
+resource_name = "walk"
+length = 0.4
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRoot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1, 0.3),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [-0.139626, 0.139626]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteRoot/Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kgkio"]
+_data = {
+"RESET": SubResource("Animation_qdunx"),
+"death": SubResource("Animation_mnxla"),
+"idle": SubResource("Animation_pwdpm"),
+"walk": SubResource("Animation_kxfb6")
+}
+
+[sub_resource type="Animation" id="Animation_udtnd"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRoot/Sprite:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_85biw"]
+resource_name = "damage"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRoot/Sprite:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 0, 0.396078, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_u3b7b"]
+resource_name = "heal"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteRoot/Sprite:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 1, 0.105882, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bfxes"]
+_data = {
+"RESET": SubResource("Animation_udtnd"),
+"damage": SubResource("Animation_85biw"),
+"heal": SubResource("Animation_u3b7b")
+}
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_go0fs")
+
+[node name="SpriteRoot" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite2D" parent="SpriteRoot"]
+texture = ExtResource("2_dduua")
+offset = Vector2(0, -8)
+region_enabled = true
+region_rect = Rect2(17, 119, 16, 16)
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_e0s1e")
+max_health = 4.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7.5)
+shape = SubResource("RectangleShape2D_n0pt0")
+
+[node name="SmoothedProgressBar" parent="." instance=ExtResource("3_htsb4")]
+offset_left = -9.0
+offset_top = -22.0
+offset_right = 9.0
+offset_bottom = -17.0
+always_show = true
+
+[node name="MovementAnimation" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_kgkio")
+}
+
+[node name="HealthAnimation" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_bfxes")
+}
+
+[connection signal="health_updated" from="HealthComponent" to="." method="_health_updated"]
